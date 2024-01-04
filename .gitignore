@@ -1,0 +1,4 @@
+.idea
+.temp
+values.yaml
+!chart/values.yaml
