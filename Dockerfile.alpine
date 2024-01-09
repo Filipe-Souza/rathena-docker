@@ -1,14 +1,11 @@
-FROM debian:buster-20231030 as compiler
+FROM alpine:3.19 as compiler
 
 LABEL org.opencontainers.image.source = "https://github.com/Filipe-Souza/rathena-docker"
-LABEL org.opencontainers.image.description="Contains a rAthena compilation environment in Debian."
+LABEL org.opencontainers.image.description="Contains a rAthena compilation environment in Alpine Linux"
+
+RUN apk add --no-cache wget git cmake make gcc g++ gdb zlib-dev mariadb-dev ca-certificates linux-headers bash valgrind netcat-openbsd git && mkdir -p /app
 
 USER root
-
-RUN apt-get update -y -qq \
-  && apt-get install git make libmariadb-dev libmariadbclient-dev libmariadbclient-dev-compat gcc g++ zlib1g-dev libpcre3-dev nano autoconf -y \
-  && rm -rf /var/lib/apt/lists/* \
-  && mkdir -p /app
 
 WORKDIR /app
 
@@ -23,14 +20,12 @@ RUN ./configure && make server -j 6
 
 RUN chmod a+x login-server char-server map-server web-server
 
-FROM debian:buster-20231030 AS release
+FROM alpine:3.19 AS release
 
 LABEL org.opencontainers.image.source = "https://github.com/Filipe-Souza/rathena-docker"
-LABEL org.opencontainers.image.description="Contains a rAthena release environment in Debian."
+LABEL org.opencontainers.image.description="Contains a rAthena release environment in Alpine Linux."
 
-RUN apt-get update -y \
-    && apt-get install libmariadb-dev libmariadbclient-dev libmariadbclient-dev-compat zlib1g-dev libpcre3-dev -y \
-    && mkdir -p /opt/rathena
+RUN apk add --no-cache wget git cmake make gcc g++ gdb zlib-dev mariadb-dev && mkdir -p /opt/rathena
 
 WORKDIR /opt/rathena
 
