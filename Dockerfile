@@ -19,7 +19,7 @@ COPY ./rathena-mods/src/custom/defines_pre.hpp src/custom/defines_pre.hpp
 COPY ./rathena-mods/src/config/core.hpp src/config/core.hpp
 COPY ./rathena-mods/src/config/packets.hpp src/config/packets.hpp
 
-RUN ./configure && make server -j 6
+RUN ./configure --enable-packetver-re && make server -j 6
 
 RUN chmod a+x login-server char-server map-server web-server
 
